@@ -11,14 +11,24 @@ const HomePage = () => {
   }, []);
 
   const fetchQuestions = async () => {
-    const response = await fetch('https://jjfebbwwtcxyhvnkuyrh.supabase.co/rest/v1/questions', {
-      headers: {
-        'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
+    try {
+      const response = await fetch('https://jjfebbwwtcxyhvnkuyrh.supabase.co/rest/v1/questions', {
+        headers: {
+          'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`
+        }
+      });
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setQuestions(data);
+      } else {
+        console.error("Expected an array but got:", data);
+        setQuestions([]);
       }
-    });
-    const data = await response.json();
-    setQuestions(data);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+      setQuestions([]);
+    }
   };
 
   const addQuestion = async () => {
