@@ -18,7 +18,7 @@ const HomePage = () => {
       }
     });
     const data = await response.json();
-    setQuestions(data);
+    setQuestions(Array.isArray(data) ? data : []);
   };
 
   const addQuestion = async () => {
